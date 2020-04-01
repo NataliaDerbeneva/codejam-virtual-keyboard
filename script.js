@@ -6,7 +6,7 @@ function makeKeyboardTable(){
 
     const keyboardWrapper = document.createElement("div");
     body.append(keyboardWrapper);
-    keyboardWrapper.classList.add("keyboard-wrapper");
+    keyboardWrapper.classList.add("keyboard__wrapper");
 
     const numRows = 5;
     const numCols = [14,15,13,13,9];
@@ -16,7 +16,7 @@ function makeKeyboardTable(){
         }
     
     let fragment = document.createDocumentFragment();
-    let div = document.createElement('div');
+    let div = document.createElement('button');
     div.classList.add('key');
     
     for (let i = 0; i < numElements; i++){
@@ -24,5 +24,38 @@ function makeKeyboardTable(){
     }   
 
     keyboardWrapper.appendChild(fragment);
-    console.log(keyboardWrapper);
+
+    let allButtons = keyboardWrapper.querySelectorAll('.key');
+    allButtons[13].classList.add('key_long');
+    allButtons[14].classList.add('key_short');
+    allButtons[28].classList.add('key_short');
+    allButtons[29].classList.add('key_long');
+    allButtons[41].classList.add('key_middle');
+    allButtons[42].classList.add('key_long');
+    allButtons[54].classList.add('key_middle');
+    allButtons[58].classList.add('key_very-long');
+
+
+    
+}
+
+
+class Button{
+    constructor (keyCode, en, ru){
+        this.keyCode = keyCode;
+        this.en = en;
+        this.ru = ru;
+    }
+
+    get keyCode(){
+        return this.keyCode;
+    }
+
+    get keyNameEn() {
+        return this.en;
+    }
+
+    get keyNameRu() {
+        return this.ru;
+    }
 }
