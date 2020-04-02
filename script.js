@@ -71,8 +71,6 @@ const keys = {
 
 
 
-    const body = document.querySelector('body');
-
 window.addEventListener("onload", makeKeyboardTable());
 
 function makeKeyboardTable(){
@@ -81,6 +79,8 @@ function makeKeyboardTable(){
     body.append(keyboardWrapper);
     keyboardWrapper.classList.add("keyboard__wrapper");
 
+    let input = document.createElement("input");
+ 
     const numRows = 5;
     const numCols = [14,15,13,13,9];
     let numElements = 0;
@@ -112,22 +112,12 @@ function makeKeyboardTable(){
 }
 
     function fillKeyboard(lang, buttons) {
-        if(lang == "en") {
-            let i = 0;
-            for (const [key, value] of Object.entries(keys)){ 
-                let {en, type} = value;
-                buttons[i].id = type;
-                buttons[i].innerHTML = en;
-                i++;
-            }
-        } else if(lang == "ru") {
-            let i = 0;
-            for (const [key, value] of Object.entries(keys)){
-                let {ru, type} = value;
-                buttons[i].id = type;
-                buttons[i].innerHTML = ru;
-                i++;
-            }
+        let i = 0;
+        for (const [key, value] of Object.entries(keys)){ 
+            let {[lang]:outInnerHTML, type} = value;
+            buttons[i].id = type;
+            buttons[i].innerHTML = outInnerHTML;
+            i++;
         }
     } 
        
