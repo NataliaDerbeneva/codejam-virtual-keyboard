@@ -3,8 +3,26 @@
     padding: 0;
 }
 
+.body__wrapper {
+    width: 100%;
+    height: fit-content;
+    padding: 1px;
+    border: 1px solid yellow;
+}
+
+.output-textarea {
+    margin: 30px auto;
+    width: 600px;
+    height: 200px;
+    display: block;
+    border: 1px solid green;
+    color: black;
+    font-size: 14px;
+    font-family: Verdana, sans-serif;
+}
+
 .keyboard__wrapper {
-    margin: 0 auto;
+    margin: 0px auto;
     display: flex;
     flex-wrap: wrap;
     width: 690px;

@@ -97,13 +97,19 @@ window.addEventListener("onload", makeKeyboardTable());
 
 function makeKeyboardTable(){
 
-    let body = document.querySelector("body");
-    const keyboardWrapper = document.createElement("div");
-    body.append(keyboardWrapper);
-    keyboardWrapper.classList.add("keyboard__wrapper");
+    let body = document.querySelector('body');
+    
+    let bodyWrapper = document.createElement('div');
+    bodyWrapper.classList.add('body__wrapper');
 
-    let output = document.createElement("textarea");
- 
+    let output = document.createElement('textarea');
+    output.classList.add('output-textarea');
+    bodyWrapper.appendChild(output);
+
+    let keyboardWrapper = document.createElement('div');
+    keyboardWrapper.classList.add('keyboard__wrapper');
+    bodyWrapper.appendChild(keyboardWrapper);
+
     const numRows = 5;
     const numCols = [14,15,13,13,9];
     let numElements = 0;
@@ -120,6 +126,7 @@ function makeKeyboardTable(){
     }   
 
     keyboardWrapper.appendChild(fragment);
+    body.appendChild(bodyWrapper);
 
     let buttons = keyboardWrapper.querySelectorAll('.key');
     buttons[13].classList.add('key_long');
@@ -132,7 +139,7 @@ function makeKeyboardTable(){
     buttons[58].classList.add('key_very-long');
 
     fillKeyboard(lang, buttons);
-
+    let shift = "";
     let btn = new Button("KeyZ",lang,shift);
     console.log(btn.value);
 }
