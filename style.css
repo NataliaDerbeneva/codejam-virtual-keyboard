@@ -14,12 +14,14 @@
 }
 
 .key {
-    background-color: red;
+    background-color: greenyellow;
     margin: 2px;
     width: 40px; 
     height: 40px;
     border: none;
     border-radius: 5px;
+    color: black;
+    font-size: 15px;
 }
 
 .key_short {
