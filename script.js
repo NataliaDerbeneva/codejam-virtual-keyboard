@@ -185,6 +185,9 @@ CapsLock(){
     this.fillKeyboard();
 }
 
+ShiftLeft(){this.CapsLock();}
+ShiftRight(){this.CapsLock();}
+
 }      
 
 
