@@ -188,6 +188,41 @@ CapsLock(){
 ShiftLeft(){this.CapsLock();}
 ShiftRight(){this.CapsLock();}
 
+changeLang(){
+    let posInLangs = this.#langs.indexOf(lang);
+    this.lang = this.#langs[Number(!posInLangs)];
+    this.fillKeyboard();
+}
+
+Alt(){
+    this.alt = true;
+    if(this.ctrl) this.changeLang();
+}
+
+AltReset(){
+    this.alt = false;
+}
+
+AltLeft(){this.Alt();}
+AltRight(){this.Alt();}
+AltLeftReset(){this.AltReset();}
+AltRightReset(){this.AltReset();}
+
+Ctrl(){
+    this.ctrl = true;
+    if(this.alt) this.changeLang();
+}
+
+CtrlReset(){
+    this.ctrl = false;
+}
+
+ControlLeft(){this.Ctrl();}
+ControlRight(){this.Ctrl();}
+ControlLeftReset(){this.CtrlReset();}
+ControlRightReset(){this.CtrlReset();}
+
+
 }      
 
 
@@ -271,6 +306,7 @@ console.log(event);
 
 btn.setCurrentPosition();
 console.log(btn.getCurrentPosition());
-btn.CapsLock();
+btn.AltLeft();
+btn.ControlLeft();
 console.log(btn.getCurrentPosition());
 }
