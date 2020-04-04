@@ -106,7 +106,7 @@ fillKeyboard() {
     let i = 0;
     let buttons = document.querySelectorAll('.key');
     for (const [keyCode, value] of Object.entries(keys)){ 
-        let {[this.lang]:innerHTML, type} = value;
+        let {[`${this.lang}${this.shift}`]:innerHTML, type} = value;
         buttons[i].id = type;
         buttons[i].name = keyCode; 
         buttons[i].innerHTML = innerHTML;
@@ -179,6 +179,11 @@ Enter(){
     this.PrintSymbol('\n');
 }
 
+CapsLock(){
+    if(this.shift) this.shift = "";
+    else this.shift = "Shift";
+    this.fillKeyboard();
+}
 
 }      
 
@@ -263,6 +268,6 @@ console.log(event);
 
 btn.setCurrentPosition();
 console.log(btn.getCurrentPosition());
-btn.Enter();
+btn.CapsLock();
 console.log(btn.getCurrentPosition());
 }
