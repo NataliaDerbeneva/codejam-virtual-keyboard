@@ -175,6 +175,11 @@ Tab(){
     this.PrintSymbol('    ');        
 }
 
+Enter(){
+    this.PrintSymbol('\n');
+}
+
+
 }      
 
 
@@ -238,6 +243,7 @@ btn.Print("KeyO");
 btn.Print("KeyP");
 btn.Print("KeyR");
 btn.Print("KeyS");
+btn.Enter();
 btn.Print("KeyT");
 btn.Print("KeyU");
 btn.Print("KeyP");
@@ -257,6 +263,6 @@ console.log(event);
 
 btn.setCurrentPosition();
 console.log(btn.getCurrentPosition());
-btn.Backspace();
+btn.Enter();
 console.log(btn.getCurrentPosition());
 }
