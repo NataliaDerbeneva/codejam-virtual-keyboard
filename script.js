@@ -292,40 +292,56 @@ changeCurrentPosition(parsedText){
     console.log(`row = ${currentRow}, col = ${currentColumn}, pos = ${this.currentPosition}`);
 }
 
-ArrowMove(shiftRow,shiftColumn){
+changeSelection(parsedText, shiftValue, isSelectionNeeded){
+    var oldPosition = this.currentPosition;
+    this.changeCurrentPosition(parsedText);
+    
+    var start, end;
+    if(isSelectionNeeded){
+        [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];  
+        if(start == end)
+            if(shiftValue > 0) this.textarea.selectionEnd = this.currentPosition;
+            else this.textarea.selectionStart = this.currentPosition;
+        else
+            if(oldPosition == start) this.textarea.selectionStart = this.currentPosition;
+            else this.textarea.selectionEnd = this.currentPosition;        
+    } else
+        if(shiftValue > 0) this.textarea.selectionStart = this.currentPosition;
+        else this.textarea.selectionEnd = this.currentPosition;
+
+    [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];
+    console.log(start, end, this.textarea.value.substring(start,end));    
+    this.textarea.focus();
+}
+
+ArrowMove(shiftRow, shiftColumn, isSelectionNeeded){
     let parsedText = this.currentPositionInRow;
     if(shiftRow) {
         let [rows,currentRow,currentColumn] = this.changeCurrentRow(shiftRow, parsedText); 
         [,,currentColumn] = this.changeCurrentColumn(0,[[rows[currentRow]],0,currentColumn]);
-        this.changeCurrentPosition([rows,currentRow,currentColumn]);
-        if(shiftRow > 0) this.textarea.selectionStart = this.currentPosition;
-        else this.textarea.selectionEnd = this.currentPosition;
-        this.textarea.focus();
+        this.changeSelection([rows,currentRow,currentColumn], shiftRow, isSelectionNeeded);
     }
     if(shiftColumn) {
         parsedText = this.changeCurrentColumn(shiftColumn, parsedText);
-        this.changeCurrentPosition(parsedText);
-        if(shiftColumn > 0) this.textarea.selectionStart = this.currentPosition;
-        else this.textarea.selectionEnd = this.currentPosition;
-        this.textarea.focus();
+        this.changeSelection(parsedText, shiftColumn, isSelectionNeeded);
     }   
 }
 
 
 ArrowUp(){
-    this.ArrowMove(-1,0);
+    this.ArrowMove(-1,0,this.ctrl);
 }
 
 ArrowRight(){
-    this.ArrowMove(0,1);
+    this.ArrowMove(0,1,this.ctrl); 
 }
 
 ArrowDown(){
-    this.ArrowMove(1,0);
+    this.ArrowMove(1,0,this.ctrl);
 }
 
 ArrowLeft(){
-    this.ArrowMove(0,-1);
+    this.ArrowMove(0,-1,this.ctrl);
 }
 
 
@@ -409,14 +425,9 @@ actionButtons.forEach(button => button.addEventListener('click',clickButton));
 
 function clickButton(event){
     console.log(event.target.name);
+    btn.ControlLeft();
     btn[event.target.name]();
 }
-
-actionButtons.forEach(button => button.addEventListener('focus',onFocus));
-function onFocus(event){
-    event.preventDefault();
-}
-
 
 let textarea = document.querySelector('.output-textarea');
 textarea.addEventListener('click',clickTextarea);
