@@ -13,7 +13,7 @@ const keys = {
     'Minus': {en: '-', enShift: '_', ru: '-', ruShift:'_', type: "Print"},
     'Equal': {en: '=', enShift: '+', ru: '=', ruShift:'+', type: "Print"},
     'Backspace': {en: 'Backspace', enShift: 'Backspace', ru: 'Backspace', ruShift:'Backspace', type: "action"},
-    'Tab': {en: 'Tab', enShift: 'Tab', ru: 'Tab', ruShift:'Tab', type: "action"},
+    'Tab': {en: 'Tab', enShift: 'Tab', ru: 'Tab', ruShift:'Tab', type: "Print"},
     'KeyQ': {en: 'q', enShift: 'Q', ru: 'й', ruShift: 'Й', type: "Print"},
     'KeyW': {en: 'w', enShift: 'W', ru: 'ц', ruShift: 'Ц', type: "Print"},
     'KeyE': {en: 'e', enShift: 'E', ru: 'у', ruShift: 'У', type: "Print"},
@@ -40,7 +40,7 @@ const keys = {
     'KeyL': {en: 'l', enShift: 'L', ru: 'д', ruShift: 'Д', type: "Print"},
     'Semicolon': {en: ';', enShift: ':', ru: 'ж', ruShift: 'Ж', type: "Print"},
     'Quote': {en: '\'', enShift: '"', ru: 'э', ruShift: 'Э', type: "Print"},
-    'Enter': {en: 'Enter', enShift: 'Enter', ru: 'Enter', ruShift: 'Enter', type: "action"},
+    'Enter': {en: 'Enter', enShift: 'Enter', ru: 'Enter', ruShift: 'Enter', type: "Print"},
     'ShiftLeft': {en: 'Shift', enShift: 'Shift', ru: 'Shift', ruShift: 'Shift', type: "action"},
     'KeyZ': {en: 'z', enShift: 'Z', ru: 'я', ruShift: 'Я', type: "Print"},
     'KeyX': {en: 'x', enShift: 'X', ru: 'ч', ruShift: 'Ч', type: "Print"},
@@ -132,7 +132,7 @@ PrintSymbol(s){
 }
 
 Print(keyCode){
-    let outStringType = `${this.lang}${this.shift}`;
+    let outStringType = this.lang + this.shift;
     let {[keyCode]: {[outStringType]: value}} = keys;
     this.PrintSymbol(value);
 }
@@ -223,6 +223,112 @@ ControlLeftReset(){this.CtrlReset();}
 ControlRightReset(){this.CtrlReset();}
 
 
+get currentPositionInRow(){
+    let text = this.textarea.value;
+    let rows = text.split('\n');
+    let nRows = rows.length;
+
+    let currentColumn = this.currentPosition;
+
+    let currentRow=0;
+    while(currentColumn > rows[currentRow].length) {
+        currentColumn -= rows[currentRow].length + 1;
+        currentRow++;
+    }
+
+    return [rows, currentRow, currentColumn];
+}   
+
+changeCurrentRow(shiftRow, parsedText){
+    let [rows, currentRow, currentColumn] = parsedText;
+    currentRow += shiftRow; 
+
+    if(currentRow < 0) {
+        currentRow = 0;
+        currentColumn = 0;
+    }    
+    else if(currentRow > rows.length-1) {
+        currentRow = rows.length - 1;
+        currentColumn = rows[currentRow].length;
+    }
+
+    return [rows, currentRow, currentColumn];
+}
+
+changeCurrentColumn(shiftColumn, parsedText){
+    let [rows, currentRow, currentColumn] = parsedText;
+
+    currentColumn += shiftColumn;
+    
+    if(currentColumn > rows[currentRow].length) {
+        let [,shiftedRow, shiftedColumn] = this.changeCurrentRow(1,parsedText);
+        if(currentRow == shiftedRow) currentColumn = shiftedColumn;
+        else {                  
+            currentColumn -= rows[currentRow].length + 1;
+            currentRow = shiftedRow;
+        }
+    } else if (currentColumn < 0) {
+        let [,shiftedRow, shiftedColumn] = this.changeCurrentRow(-1,parsedText);
+        if(currentRow == shiftedRow) currentColumn = shiftedColumn;
+        else {
+            currentRow = shiftedRow;
+            currentColumn += rows[currentRow].length + 1; 
+        }    
+    } 
+    
+    return [rows, currentRow, currentColumn];
+}
+
+changeCurrentPosition(parsedText){
+    let [rows,currentRow,currentColumn] = parsedText;
+    let row = 0;
+    this.currentPosition = 0;
+    while(row < currentRow){
+        this.currentPosition += rows[row].length + 1;
+        row++;
+    }
+    this.currentPosition += currentColumn;
+
+    console.log(`row = ${currentRow}, col = ${currentColumn}, pos = ${this.currentPosition}`);
+}
+
+ArrowMove(shiftRow,shiftColumn){
+    let parsedText = this.currentPositionInRow;
+    if(shiftRow) {
+        let [rows,currentRow,currentColumn] = this.changeCurrentRow(shiftRow, parsedText); 
+        [,,currentColumn] = this.changeCurrentColumn(0,[[rows[currentRow]],0,currentColumn]);
+        this.changeCurrentPosition([rows,currentRow,currentColumn]);
+        if(shiftRow > 0) this.textarea.selectionStart = this.currentPosition;
+        else this.textarea.selectionEnd = this.currentPosition;
+        this.textarea.focus();
+    }
+    if(shiftColumn) {
+        parsedText = this.changeCurrentColumn(shiftColumn, parsedText);
+        this.changeCurrentPosition(parsedText);
+        if(shiftColumn > 0) this.textarea.selectionStart = this.currentPosition;
+        else this.textarea.selectionEnd = this.currentPosition;
+        this.textarea.focus();
+    }   
+}
+
+
+ArrowUp(){
+    this.ArrowMove(-1,0);
+}
+
+ArrowRight(){
+    this.ArrowMove(0,1);
+}
+
+ArrowDown(){
+    this.ArrowMove(1,0);
+}
+
+ArrowLeft(){
+    this.ArrowMove(0,-1);
+}
+
+
 }      
 
 
@@ -282,6 +388,7 @@ btn.Print("KeyM");
 btn.Tab();
 btn.Print("KeyM");
 btn.Print("KeyN");
+btn.Enter();
 btn.Print("KeyO");
 btn.Print("KeyP");
 btn.Print("KeyR");
@@ -297,16 +404,23 @@ btn.Print("KeyP");
 
 
 
+let actionButtons = document.querySelectorAll('#action');
+actionButtons.forEach(button => button.addEventListener('click',clickButton));
+
+function clickButton(event){
+    console.log(event.target.name);
+    btn[event.target.name]();
+}
+
+actionButtons.forEach(button => button.addEventListener('focus',onFocus));
+function onFocus(event){
+    event.preventDefault();
+}
+
 
 let textarea = document.querySelector('.output-textarea');
 textarea.addEventListener('click',clickTextarea);
 
 function clickTextarea(){
-console.log(event);
-
 btn.setCurrentPosition();
-console.log(btn.getCurrentPosition());
-btn.AltLeft();
-btn.ControlLeft();
-console.log(btn.getCurrentPosition());
 }
