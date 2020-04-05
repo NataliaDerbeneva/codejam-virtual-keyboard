@@ -1,57 +1,57 @@
 const keys = {
-    'Backquote': {en: '\`', enShift: '~', ru: 'ё', ruShift: "Ё", type: "Print"},
-    'Digit1': {en: '1', enShift: '!', ru: '1', ruShift: '!', type: "Print"},
-    'Digit2': {en: '2', enShift: '@', ru: '2', ruShift: '\"', type: "Print"},
-    'Digit3': {en: '3', enShift: '#', ru: '3', ruShift: '№', type: "Print"},
-    'Digit4': {en: '4', enShift: '$', ru: '4', ruShift: ';', type: "Print"},
-    'Digit5': {en: '5', enShift: '%', ru: '5', ruShift: '%', type: "Print"},
-    'Digit6': {en: '6', enShift: '^', ru: '6', ruShift: ':', type: "Print"},
-    'Digit7': {en: '7', enShift: '&', ru: '7', ruShift: '?', type: "Print"},
-    'Digit8': {en: '8', enShift: '*', ru: '8', ruShift: '*', type: "Print"},
-    'Digit9': {en: '9', enShift: '(', ru: '9', ruShift: '(', type: "Print"},
-    'Digit0': {en: '0', enShift: ')', ru: '0', ruShift:')', type: "Print"},
-    'Minus': {en: '-', enShift: '_', ru: '-', ruShift:'_', type: "Print"},
-    'Equal': {en: '=', enShift: '+', ru: '=', ruShift:'+', type: "Print"},
+    'Backquote': {en: '\`', enShift: '~', ru: 'ё', ruShift: "Ё", type: "print"},
+    'Digit1': {en: '1', enShift: '!', ru: '1', ruShift: '!', type: "print"},
+    'Digit2': {en: '2', enShift: '@', ru: '2', ruShift: '\"', type: "print"},
+    'Digit3': {en: '3', enShift: '#', ru: '3', ruShift: '№', type: "print"},
+    'Digit4': {en: '4', enShift: '$', ru: '4', ruShift: ';', type: "print"},
+    'Digit5': {en: '5', enShift: '%', ru: '5', ruShift: '%', type: "print"},
+    'Digit6': {en: '6', enShift: '^', ru: '6', ruShift: ':', type: "print"},
+    'Digit7': {en: '7', enShift: '&', ru: '7', ruShift: '?', type: "print"},
+    'Digit8': {en: '8', enShift: '*', ru: '8', ruShift: '*', type: "print"},
+    'Digit9': {en: '9', enShift: '(', ru: '9', ruShift: '(', type: "print"},
+    'Digit0': {en: '0', enShift: ')', ru: '0', ruShift:')', type: "print"},
+    'Minus': {en: '-', enShift: '_', ru: '-', ruShift:'_', type: "print"},
+    'Equal': {en: '=', enShift: '+', ru: '=', ruShift:'+', type: "print"},
     'Backspace': {en: 'Backspace', enShift: 'Backspace', ru: 'Backspace', ruShift:'Backspace', type: "action"},
-    'Tab': {en: 'Tab', enShift: 'Tab', ru: 'Tab', ruShift:'Tab', type: "Print"},
-    'KeyQ': {en: 'q', enShift: 'Q', ru: 'й', ruShift: 'Й', type: "Print"},
-    'KeyW': {en: 'w', enShift: 'W', ru: 'ц', ruShift: 'Ц', type: "Print"},
-    'KeyE': {en: 'e', enShift: 'E', ru: 'у', ruShift: 'У', type: "Print"},
-    'KeyR': {en: 'r', enShift: 'R', ru: 'к', ruShift: 'К', type: "Print"},
-    'KeyT': {en: 't', enShift: 'T', ru: 'е', ruShift: 'Е', type: "Print"},
-    'KeyY': {en: 'y', enShift: 'Y', ru: 'н', ruShift: 'Н', type: "Print"},
-    'KeyU': {en: 'u', enShift: 'U', ru: 'г', ruShift: 'Г', type: "Print"},
-    'KeyI': {en: 'i', enShift: 'I', ru: 'ш', ruShift: 'Ш', type: "Print"},
-    'KeyO': {en: 'o', enShift: 'O', ru: 'щ', ruShift: 'Щ', type: "Print"},
-    'KeyP': {en: 'p', enShift: 'P', ru: 'з', ruShift: 'З', type: "Print"},
-    'BracketRight': {en: '[', enShift: '{', ru: 'х', ruShift: 'Х', type: "Print"},
-    'BracketLeft': {en: ']', enShift: '}', ru: 'ъ', ruShift: 'Ъ', type: "Print"},
-    'Backslash': {en: '\\', enShift: '|', ru: '\\', ruShift: '/', type: "Print"},
+    'Tab': {en: 'Tab', enShift: 'Tab', ru: 'Tab', ruShift:'Tab', type: "print"},
+    'KeyQ': {en: 'q', enShift: 'Q', ru: 'й', ruShift: 'Й', type: "print"},
+    'KeyW': {en: 'w', enShift: 'W', ru: 'ц', ruShift: 'Ц', type: "print"},
+    'KeyE': {en: 'e', enShift: 'E', ru: 'у', ruShift: 'У', type: "print"},
+    'KeyR': {en: 'r', enShift: 'R', ru: 'к', ruShift: 'К', type: "print"},
+    'KeyT': {en: 't', enShift: 'T', ru: 'е', ruShift: 'Е', type: "print"},
+    'KeyY': {en: 'y', enShift: 'Y', ru: 'н', ruShift: 'Н', type: "print"},
+    'KeyU': {en: 'u', enShift: 'U', ru: 'г', ruShift: 'Г', type: "print"},
+    'KeyI': {en: 'i', enShift: 'I', ru: 'ш', ruShift: 'Ш', type: "print"},
+    'KeyO': {en: 'o', enShift: 'O', ru: 'щ', ruShift: 'Щ', type: "print"},
+    'KeyP': {en: 'p', enShift: 'P', ru: 'з', ruShift: 'З', type: "print"},
+    'BracketRight': {en: '[', enShift: '{', ru: 'х', ruShift: 'Х', type: "print"},
+    'BracketLeft': {en: ']', enShift: '}', ru: 'ъ', ruShift: 'Ъ', type: "print"},
+    'Backslash': {en: '\\', enShift: '|', ru: '\\', ruShift: '/', type: "print"},
     'Delete': {en: 'Delete', enShift: 'Delete', ru: 'Delete', ruShift: 'Delete', type: "action"},
     'CapsLock': {en: 'CapsLock', enShift: 'CapsLock', ru: 'CapsLock', ruShift: 'CapsLock',  type: "action"},
-    'KeyA': {en: 'a', enShift: 'A', ru: 'ф', ruShift: 'Ф', type: "Print"},
-    'KeyS': {en: 's', enShift: 'S', ru: 'ы', ruShift: 'Ы', type: "Print"},
-    'KeyD': {en: 'd', enShift: 'D', ru: 'в', ruShift: 'В', type: "Print"},
-    'KeyF': {en: 'f', enShift: 'F', ru: 'а', ruShift: 'А', type: "Print"},
-    'KeyG': {en: 'g', enShift: 'G', ru: 'п', ruShift: 'П', type: "Print"},
-    'KeyH': {en: 'h', enShift: 'H', ru: 'р', ruShift: 'Р', type: "Print"},
-    'KeyJ': {en: 'j', enShift: 'J', ru: 'о', ruShift: 'О', type: "Print"},
-    'KeyK': {en: 'k', enShift: 'K', ru: 'л', ruShift: 'Л', type: "Print"},
-    'KeyL': {en: 'l', enShift: 'L', ru: 'д', ruShift: 'Д', type: "Print"},
-    'Semicolon': {en: ';', enShift: ':', ru: 'ж', ruShift: 'Ж', type: "Print"},
-    'Quote': {en: '\'', enShift: '"', ru: 'э', ruShift: 'Э', type: "Print"},
-    'Enter': {en: 'Enter', enShift: 'Enter', ru: 'Enter', ruShift: 'Enter', type: "Print"},
+    'KeyA': {en: 'a', enShift: 'A', ru: 'ф', ruShift: 'Ф', type: "print"},
+    'KeyS': {en: 's', enShift: 'S', ru: 'ы', ruShift: 'Ы', type: "print"},
+    'KeyD': {en: 'd', enShift: 'D', ru: 'в', ruShift: 'В', type: "print"},
+    'KeyF': {en: 'f', enShift: 'F', ru: 'а', ruShift: 'А', type: "print"},
+    'KeyG': {en: 'g', enShift: 'G', ru: 'п', ruShift: 'П', type: "print"},
+    'KeyH': {en: 'h', enShift: 'H', ru: 'р', ruShift: 'Р', type: "print"},
+    'KeyJ': {en: 'j', enShift: 'J', ru: 'о', ruShift: 'О', type: "print"},
+    'KeyK': {en: 'k', enShift: 'K', ru: 'л', ruShift: 'Л', type: "print"},
+    'KeyL': {en: 'l', enShift: 'L', ru: 'д', ruShift: 'Д', type: "print"},
+    'Semicolon': {en: ';', enShift: ':', ru: 'ж', ruShift: 'Ж', type: "print"},
+    'Quote': {en: '\'', enShift: '"', ru: 'э', ruShift: 'Э', type: "print"},
+    'Enter': {en: 'Enter', enShift: 'Enter', ru: 'Enter', ruShift: 'Enter', type: "print"},
     'ShiftLeft': {en: 'Shift', enShift: 'Shift', ru: 'Shift', ruShift: 'Shift', type: "action"},
-    'KeyZ': {en: 'z', enShift: 'Z', ru: 'я', ruShift: 'Я', type: "Print"},
-    'KeyX': {en: 'x', enShift: 'X', ru: 'ч', ruShift: 'Ч', type: "Print"},
-    'KeyC': {en: 'c', enShift: 'C', ru: 'с', ruShift: 'С', type: "Print"},
-    'KeyV': {en: 'v', enShift: 'V', ru: 'м', ruShift: 'М', type: "Print"},
-    'KeyB': {en: 'b', enShift: 'B', ru: 'и', ruShift: 'И', type: "Print"},
-    'KeyN': {en: 'n', enShift: 'N', ru: 'т', ruShift: 'Т', type: "Print"},
-    'KeyM': {en: 'm', enShift: 'M', ru: 'ь', ruShift: 'Ь', type: "Print"},
-    'Key,': {en: ',', enShift: '<', ru: 'б', ruShift: 'Б', type: "Print"},
-    'Key.': {en: '.', enShift: '>', ru: 'ю', ruShift: 'Ю', type: "Print"},
-    'Key/': {en: '/', enShift: '?', ru: '.', ruShift: ',', type: "Print"},
+    'KeyZ': {en: 'z', enShift: 'Z', ru: 'я', ruShift: 'Я', type: "print"},
+    'KeyX': {en: 'x', enShift: 'X', ru: 'ч', ruShift: 'Ч', type: "print"},
+    'KeyC': {en: 'c', enShift: 'C', ru: 'с', ruShift: 'С', type: "print"},
+    'KeyV': {en: 'v', enShift: 'V', ru: 'м', ruShift: 'М', type: "print"},
+    'KeyB': {en: 'b', enShift: 'B', ru: 'и', ruShift: 'И', type: "print"},
+    'KeyN': {en: 'n', enShift: 'N', ru: 'т', ruShift: 'Т', type: "print"},
+    'KeyM': {en: 'm', enShift: 'M', ru: 'ь', ruShift: 'Ь', type: "print"},
+    'Key,': {en: ',', enShift: '<', ru: 'б', ruShift: 'Б', type: "print"},
+    'Key.': {en: '.', enShift: '>', ru: 'ю', ruShift: 'Ю', type: "print"},
+    'Key/': {en: '/', enShift: '?', ru: '.', ruShift: ',', type: "print"},
     'ArrowUp': {en: '&uarr;', enShift: '&uarr;', ru: '&uarr;', ruShift: '&uarr;', type: "action"},
     'ShiftRight': {en: 'Shift', enShift: 'Shift', ru: 'Shift', ruShift: 'Shift', type: "action"},
     'ControlLeft': {en: 'Ctrl', enShift: 'Ctrl', ru: 'Ctrl', ruShift: 'Ctrl', type: "action"},
@@ -123,12 +123,22 @@ getCurrentPosition(){
 }
 
 PrintSymbol(s){
-    let [text, pos, afterText] = [this.textarea.value, this.currentPosition, ""];
-    let beforeText = text.substring(0, pos);
-    if(pos < text.length) afterText = text.substring(pos, text.length);
+    let [text, pos] = [this.textarea.value, this.currentPosition];
+    let [afterText, beforeText] =  ["", ""];
+    let [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];
 
+    if(end-start){
+        pos = start;
+        beforeText = text.substring(0,start);
+        afterText = text.substring(end, text.length);
+    } else {
+        beforeText = text.substring(0, pos);
+        afterText = text.substring(pos, text.length);
+    }
     this.textarea.value = `${beforeText}${s}${afterText}`;
     this.currentPosition += s.length;
+    this.textarea.selectionEnd = this.currentPosition;
+    this.textarea.focus();
 }
 
 Print(keyCode){
@@ -142,7 +152,7 @@ Backspace(){
     let [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];
     let [afterText, beforeText] = ["", ""];
 
-    if(start-end){
+    if(end-start){
        beforeText = text.substring(0,start);
        afterText = text.substring(end,text.length);
        this.textarea.value = beforeText + afterText; 
@@ -427,17 +437,25 @@ btn.Print("KeyP");
 
 
 let actionButtons = document.querySelectorAll('#action');
-actionButtons.forEach(button => button.addEventListener('click',clickButton));
+actionButtons.forEach(button => button.addEventListener('click',clickActionButton));
 
-function clickButton(event){
+function clickActionButton(event){
     console.log(event.target.name);
     btn.ControlLeft();
     btn[event.target.name]();
+}
+
+let printButtons = document.querySelectorAll('#print');
+printButtons.forEach(button => button.addEventListener('click',clickPrintButton));
+
+function clickPrintButton(event){
+    console.log(event.target.name);
+    btn.PrintSymbol(event.target.innerHTML);
 }
 
 let textarea = document.querySelector('.output-textarea');
 textarea.addEventListener('click',clickTextarea);
 
 function clickTextarea(){
-btn.setCurrentPosition();
+    btn.setCurrentPosition();
 }
