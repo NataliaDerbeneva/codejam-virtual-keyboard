@@ -139,16 +139,20 @@ Print(keyCode){
 
 Backspace(){
     let [text, pos] = [this.textarea.value, this.currentPosition];
-    if(pos > 0 && text.length > 0){     
-        let [afterText, beforeText] = ["", ""];
-        if(pos < text.length) afterText = text.substring(pos, text.length);
+    let [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];
+    let [afterText, beforeText] = ["", ""];
 
-        let symbolToDelete = text.substring(pos-1, pos);
-        console.log(symbolToDelete);
-        if(symbolToDelete == '\n' && pos-2 > 0){
-            beforeText = text.substring(0, pos-2);
-            this.currentPosition -= 2;
-        } else if(pos-1 > 0){
+    if(start-end){
+       beforeText = text.substring(0,start);
+       afterText = text.substring(end,text.length);
+       this.textarea.value = beforeText + afterText; 
+       this.currentPosition = start;
+    } else {
+        if(pos > 0){     
+            afterText = text.substring(pos, text.length);
+
+            let symbolToDelete = text.substring(pos-1, pos);
+            console.log(symbolToDelete);
             if(symbolToDelete == " ") {
                 let numSpaces = 1;
                 while(text.substring(pos-1-numSpaces, pos-numSpaces) == " "){
@@ -165,10 +169,12 @@ Backspace(){
                 beforeText = text.substring(0, pos-1);
                 this.currentPosition--;            
             }    
-        }
 
-        this.textarea.value = beforeText + afterText;
+            this.textarea.value = beforeText + afterText;
+        }
     }
+    this.textarea.selectionEnd = this.currentPosition;
+    this.textarea.focus();
 }
 
 Tab(){
