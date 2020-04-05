@@ -13,7 +13,7 @@ const keys = {
     'Minus': {en: '-', enShift: '_', ru: '-', ruShift:'_', type: "print"},
     'Equal': {en: '=', enShift: '+', ru: '=', ruShift:'+', type: "print"},
     'Backspace': {en: 'Backspace', enShift: 'Backspace', ru: 'Backspace', ruShift:'Backspace', type: "action"},
-    'Tab': {en: 'Tab', enShift: 'Tab', ru: 'Tab', ruShift:'Tab', type: "print"},
+    'Tab': {en: 'Tab', enShift: 'Tab', ru: 'Tab', ruShift:'Tab', type: "action"},
     'KeyQ': {en: 'q', enShift: 'Q', ru: 'й', ruShift: 'Й', type: "print"},
     'KeyW': {en: 'w', enShift: 'W', ru: 'ц', ruShift: 'Ц', type: "print"},
     'KeyE': {en: 'e', enShift: 'E', ru: 'у', ruShift: 'У', type: "print"},
@@ -40,7 +40,7 @@ const keys = {
     'KeyL': {en: 'l', enShift: 'L', ru: 'д', ruShift: 'Д', type: "print"},
     'Semicolon': {en: ';', enShift: ':', ru: 'ж', ruShift: 'Ж', type: "print"},
     'Quote': {en: '\'', enShift: '"', ru: 'э', ruShift: 'Э', type: "print"},
-    'Enter': {en: 'Enter', enShift: 'Enter', ru: 'Enter', ruShift: 'Enter', type: "print"},
+    'Enter': {en: 'Enter', enShift: 'Enter', ru: 'Enter', ruShift: 'Enter', type: "action"},
     'ShiftLeft': {en: 'Shift', enShift: 'Shift', ru: 'Shift', ruShift: 'Shift', type: "action"},
     'KeyZ': {en: 'z', enShift: 'Z', ru: 'я', ruShift: 'Я', type: "print"},
     'KeyX': {en: 'x', enShift: 'X', ru: 'ч', ruShift: 'Ч', type: "print"},
@@ -291,7 +291,6 @@ changeCurrentColumn(shiftColumn, parsedText){
             currentColumn += rows[currentRow].length + 1; 
         }    
     } 
-    
     return [rows, currentRow, currentColumn];
 }
 
@@ -441,7 +440,6 @@ actionButtons.forEach(button => button.addEventListener('click',clickActionButto
 
 function clickActionButton(event){
     console.log(event.target.name);
-    btn.ControlLeft();
     btn[event.target.name]();
 }
 
@@ -449,7 +447,7 @@ let printButtons = document.querySelectorAll('#print');
 printButtons.forEach(button => button.addEventListener('click',clickPrintButton));
 
 function clickPrintButton(event){
-    console.log(event.target.name);
+    console.log(event.target.innerHTML);
     btn.PrintSymbol(event.target.innerHTML);
 }
 
