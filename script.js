@@ -206,7 +206,6 @@ Backspace(){
             afterText = text.substring(pos, text.length);
 
             let symbolToDelete = text.substring(pos-1, pos);
-            console.log(symbolToDelete);
             if(symbolToDelete == " ") {
                 let numSpaces = 1;
                 while(text.substring(pos-1-numSpaces, pos-numSpaces) == " "){
@@ -576,14 +575,24 @@ function mouseupOverKeyboard(){
     }
 }
 
-
-let printButtons = document.querySelectorAll('#print');
-printButtons.forEach(button => button.addEventListener('mousedown', mousedownPrintButton));
-
-function mousedownPrintButton(event){
+function mouseDown(event){
     event.preventDefault();
     event.target.classList.remove('key_mouseover');
     event.target.classList.add('key_mousedown');
+}
+
+function mouseUp(event){
+    event.preventDefault();
+    event.target.classList.add('key_mouseover');
+    event.target.classList.remove('key_mousedown');
+}
+
+let printButtons = document.querySelectorAll('#print');
+printButtons.forEach(button => button.addEventListener('mousedown', mousedownPrintButton));
+printButtons.forEach(button => button.addEventListener('mouseup', mouseUp));
+
+function mousedownPrintButton(event){
+    mouseDown(event);
     btn.PrintSymbol(event.target.innerHTML);
     btn.ClickedButtonKeyCode = event.target.name;
 
@@ -593,13 +602,13 @@ function mousedownPrintButton(event){
     btn.ControlRightReset();
 }
 
+
 let specificPrintButtons = document.querySelectorAll('#specificPrint');
 specificPrintButtons.forEach(button => button.addEventListener('mousedown', mousedownSpecificPrintButton));
+specificPrintButtons.forEach(button => button.addEventListener('mouseup', mouseUp));
 
-function mousedownSpecificPrintButton(event){
-    event.preventDefault();
-    event.target.classList.remove('key_mouseover');
-    event.target.classList.add('key_mousedown');
+function mousedownSpecificPrintButton(){
+    mouseDown(event);
     btn.ClickedButtonKeyCode = event.target.name;
     btn[event.target.name]();
 
@@ -611,11 +620,10 @@ function mousedownSpecificPrintButton(event){
 
 let actionButtons = document.querySelectorAll('#action');
 actionButtons.forEach(button => button.addEventListener('mousedown', mousedownActionButton));
+actionButtons.forEach(button => button.addEventListener('mouseup', mouseUp));
 
 function mousedownActionButton(event){
-    event.preventDefault();
-    event.target.classList.remove('key_mouseover');
-    event.target.classList.add('key_mousedown');
+    mouseDown(event);
     btn.ClickedButtonKeyCode = event.target.name;
     btn[event.target.name]();
 }
@@ -625,10 +633,8 @@ pressButtons.forEach(button => button.addEventListener('mousedown',mousedownPres
 pressButtons.forEach(button => button.addEventListener('mouseup',mouseupPressButton));
 
 function mousedownPressButton(event){
-    event.preventDefault();
+    mouseDown(event);
     var button = event.target; 
-    button.classList.remove('key_mouseover');   
-    button.classList.add('key_mousedown');   
 
     let [buttonOtherSide, fieldName] = activateControlButton(button);
     if(!buttonOtherSide.classList.contains('key_mousedown')) {
