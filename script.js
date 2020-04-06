@@ -467,6 +467,11 @@ ArrowLeft(){
 
 let btn = new Button();
 
+window.addEventListener('onload',loadWindow);
+
+function loadWindow(){
+ console.log('load');   
+}
 
 (function (){
 
@@ -686,7 +691,8 @@ function activateControlButton(button){
     let fieldName = buttonCommonName.toLowerCase();
 
     buttonCommonName += addName;
-    let buttonOtherSide = document.querySelector(`.keyboard__wrapper .key[name = ${buttonCommonName}]`);
+    let className = `.key[name = ${buttonCommonName}]`;
+    let buttonOtherSide = document.querySelector(".keyboard__wrapper className");
     console.log(buttonOtherSide);
 
     return [buttonOtherSide, fieldName];
