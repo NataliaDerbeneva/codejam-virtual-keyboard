@@ -1,7 +1,7 @@
 const keys = {
-    'Backquote': {en: '\`', enUp: '~', ru: 'ё', ruUp: "Ё", type: "print"},
+    'Backquote': {en: '`', enUp: '~', ru: 'ё', ruUp: "Ё", type: "print"},
     'Digit1': {en: '1', enUp: '!', ru: '1', ruUp: '!', type: "print"},
-    'Digit2': {en: '2', enUp: '@', ru: '2', ruUp: '\"', type: "print"},
+    'Digit2': {en: '2', enUp: '@', ru: '2', ruUp: '"', type: "print"},
     'Digit3': {en: '3', enUp: '#', ru: '3', ruUp: '№', type: "print"},
     'Digit4': {en: '4', enUp: '$', ru: '4', ruUp: ';', type: "print"},
     'Digit5': {en: '5', enUp: '%', ru: '5', ruUp: '%', type: "print"},
@@ -66,9 +66,8 @@ const keys = {
     }
     
 class Button{
-#langs = ["en","ru"];
-
 constructor(value){
+    this.langs = ["en","ru"];
     this.lang = "en";
     this.capsLock = "";
     this.textarea = "";
@@ -87,7 +86,7 @@ constructor(value){
             [this.lang, this.capsLock] = value; 
         else if(value.length == 3)
             [this.lang, this.capsLock, this.workspace] = value; 
-    };
+    }
 }
 
 set ClickedButtonKeyCode(keyCode){
@@ -272,8 +271,8 @@ CapsLock(){
 }
 
 changeLang(){
-    let posInLangs = this.#langs.indexOf(this.lang);
-    this.lang = this.#langs[Number(!posInLangs)];
+    let posInLangs = this.langs.indexOf(this.lang);
+    this.lang = this.langs[Number(!posInLangs)];
   
     this.AltReset();
     this.ShiftReset();
@@ -343,7 +342,6 @@ ControlRightReset(){this.CtrlReset();}
 get currentPositionInRow(){
     let text = this.textarea.value;
     let rows = text.split('\n');
-    let nRows = rows.length;
 
     let currentColumn = this.currentPosition;
 
@@ -466,12 +464,6 @@ ArrowLeft(){
 
 
 let btn = new Button();
-
-window.addEventListener('onload',loadWindow);
-
-function loadWindow(){
- console.log('load');   
-}
 
 (function (){
 
@@ -640,6 +632,8 @@ pressButtons.forEach(button => button.addEventListener('mouseup',mouseupPressBut
 function mousedownPressButton(event){
     mouseDown(event);
     var button = event.target; 
+    var addFunctionName; 
+    var funcName = "";
 
     let [buttonOtherSide, fieldName] = activateControlButton(button);
     if(!buttonOtherSide.classList.contains('key_mousedown')) {
@@ -655,7 +649,9 @@ function mouseupPressButton(event){
     event.preventDefault();
     var button = event.target; 
     button.classList.add('key_mouseover');   
-    
+    var addFunctionName;
+    var funcName = "";
+
     if(!btn.isLanguageChanged) { 
         button.classList.remove('key_mousedown');   
         let [buttonOtherSide, fieldName] = activateControlButton(button);
@@ -678,7 +674,7 @@ function mouseupPressButton(event){
 }
 
 function activateControlButton(button){
-    let addName, lenOfSideName, addFunctionName;
+    let addName, lenOfSideName;
     if (button.name.match("Left")){
         lenOfSideName = 4;
         addName = "Right";
@@ -691,8 +687,8 @@ function activateControlButton(button){
     let fieldName = buttonCommonName.toLowerCase();
 
     buttonCommonName += addName;
-    let className = `.key[name = ${buttonCommonName}]`;
-    let buttonOtherSide = document.querySelector(".keyboard__wrapper className");
+
+    let buttonOtherSide = document.querySelector(".keyboard__wrapper .key[name = " + buttonCommonName);
     console.log(buttonOtherSide);
 
     return [buttonOtherSide, fieldName];
