@@ -12,8 +12,8 @@ const keys = {
     'Digit0': {en: '0', enUp: ')', ru: '0', ruUp:')', type: "print"},
     'Minus': {en: '-', enUp: '_', ru: '-', ruUp:'_', type: "print"},
     'Equal': {en: '=', enUp: '+', ru: '=', ruUp:'+', type: "print"},
-    'Backspace': {en: 'Backspace', enUp: 'Backspace', ru: 'Backspace', ruUp:'Backspace', type: "action"},
-    'Tab': {en: 'Tab', enUp: 'Tab', ru: 'Tab', ruUp:'Tab', type: "action"},
+    'Backspace': {en: 'Backspace', enUp: 'Backspace', ru: 'Backspace', ruUp:'Backspace', type: "specificPrint"},
+    'Tab': {en: 'Tab', enUp: 'Tab', ru: 'Tab', ruUp:'Tab', type: "specificPrint"},
     'KeyQ': {en: 'q', enUp: 'Q', ru: 'й', ruUp: 'Й', type: "print"},
     'KeyW': {en: 'w', enUp: 'W', ru: 'ц', ruUp: 'Ц', type: "print"},
     'KeyE': {en: 'e', enUp: 'E', ru: 'у', ruUp: 'У', type: "print"},
@@ -27,7 +27,7 @@ const keys = {
     'BracketRight': {en: '[', enUp: '{', ru: 'х', ruUp: 'Х', type: "print"},
     'BracketLeft': {en: ']', enUp: '}', ru: 'ъ', ruUp: 'Ъ', type: "print"},
     'Backslash': {en: '\\', enUp: '|', ru: '\\', ruUp: '/', type: "print"},
-    'Delete': {en: 'Delete', enUp: 'Delete', ru: 'Delete', ruUp: 'Delete', type: "action"},
+    'Delete': {en: 'Delete', enUp: 'Delete', ru: 'Delete', ruUp: 'Delete', type: "specificPrint"},
     'CapsLock': {en: 'CapsLock', enUp: 'CapsLock', ru: 'CapsLock', ruUp: 'CapsLock',  type: "capsLock"},
     'KeyA': {en: 'a', enUp: 'A', ru: 'ф', ruUp: 'Ф', type: "print"},
     'KeyS': {en: 's', enUp: 'S', ru: 'ы', ruUp: 'Ы', type: "print"},
@@ -40,7 +40,7 @@ const keys = {
     'KeyL': {en: 'l', enUp: 'L', ru: 'д', ruUp: 'Д', type: "print"},
     'Semicolon': {en: ';', enUp: ':', ru: 'ж', ruUp: 'Ж', type: "print"},
     'Quote': {en: '\'', enUp: '"', ru: 'э', ruUp: 'Э', type: "print"},
-    'Enter': {en: 'Enter', enUp: 'Enter', ru: 'Enter', ruUp: 'Enter', type: "action"},
+    'Enter': {en: 'Enter', enUp: 'Enter', ru: 'Enter', ruUp: 'Enter', type: "specificPrint"},
     'ShiftLeft': {en: 'Shift', enUp: 'Shift', ru: 'Shift', ruUp: 'Shift', type: "keyPress"},
     'KeyZ': {en: 'z', enUp: 'Z', ru: 'я', ruUp: 'Я', type: "print"},
     'KeyX': {en: 'x', enUp: 'X', ru: 'ч', ruUp: 'Ч', type: "print"},
@@ -586,6 +586,27 @@ function mousedownPrintButton(event){
     event.target.classList.add('key_mousedown');
     btn.PrintSymbol(event.target.innerHTML);
     btn.ClickedButtonKeyCode = event.target.name;
+
+    document.querySelector('.key[name = ControlLeft]').classList.remove('key_mousedown');
+    document.querySelector('.key[name = ControlRight]').classList.remove('key_mousedown');
+    btn.ControlLeftReset();
+    btn.ControlRightReset();
+}
+
+let specificPrintButtons = document.querySelectorAll('#specificPrint');
+specificPrintButtons.forEach(button => button.addEventListener('mousedown', mousedownSpecificPrintButton));
+
+function mousedownSpecificPrintButton(event){
+    event.preventDefault();
+    event.target.classList.remove('key_mouseover');
+    event.target.classList.add('key_mousedown');
+    btn.ClickedButtonKeyCode = event.target.name;
+    btn[event.target.name]();
+
+    document.querySelector('.key[name = ControlLeft]').classList.remove('key_mousedown');
+    document.querySelector('.key[name = ControlRight]').classList.remove('key_mousedown');
+    btn.ControlLeftReset();
+    btn.ControlRightReset();
 }
 
 let actionButtons = document.querySelectorAll('#action');
