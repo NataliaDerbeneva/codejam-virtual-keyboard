@@ -196,6 +196,23 @@ Enter(){
     this.PrintSymbol('\n');
 }
 
+Delete(){
+    let [text, pos] = [this.textarea.value, this.currentPosition];
+    let [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];
+
+    if(start == end){
+        if(text.length>0 && pos < text.length) {
+            this.textarea.value = text.substring(0,pos) + text.substring(pos+1,text.length);
+        }
+    } else {
+        this.textarea.value = text.substring(0,start) + text.substring(end,text.length);
+        this.currentPosition = start;
+    }
+    this.textarea.selectionEnd = this.currentPosition;  
+    this.textarea.selectionStart = this.currentPosition;
+    this.textarea.focus();
+}
+
 CapsLock(){
     if(this.capsLock) this.capsLock = "";
     else this.capsLock = "Up";
