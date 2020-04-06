@@ -72,11 +72,13 @@ constructor(value){
     this.lang = "en";
     this.capsLock = "";
     this.textarea = "";
-    this.control = false;
-    this.alt = false;
-    this.shift = false;
+    this.controlValue = false;
+    this.altValue = false;
+    this.shiftValue = false;
+    this.capsValue = false;
     this.currentPosition = 0;
     this.clickedButtonKeyCode = "";
+    this.isLangChanged = false;
 
     if(Array.isArray(value)){           
         if(value.length == 1)
@@ -94,6 +96,38 @@ set ClickedButtonKeyCode(keyCode){
 
 get ClickedButtonKeyCode(){
     return this.clickedButtonKeyCode;
+}
+
+set isLanguageChanged(bool){
+    this.isLangChanged = bool;
+}
+
+get isLanguageChanged(){
+    return this.isLangChanged;
+}
+
+set control(bool){
+    this.controlValue = bool;
+}
+
+get control(){
+    return this.controlValue;
+}
+
+set shift(bool){
+    this.shiftValue = bool;
+}
+
+get shift(){
+    return this.shiftValue;
+}
+
+set alt(bool){
+    this.altValue = bool;
+}
+
+get alt(){
+    return this.altValue;
 }
 
 set language(lang) {
@@ -226,31 +260,44 @@ MetaLeft(){
     return;
 }
 
-CapsLock(){
-    if(this.capsLock) this.capsLock = "";
+changeCapsLock(){
+    if(this.capsLock == "Up") this.capsLock = "";
     else this.capsLock = "Up";
     this.fillKeyboard();
+}
+
+CapsLock(){
+    this.changeCapsLock();
+    this.capsValue = !this.capsValue;
     this.textarea.focus();
 }
 
 changeLang(){
     let posInLangs = this.#langs.indexOf(this.lang);
     this.lang = this.#langs[Number(!posInLangs)];
-    this.fillKeyboard();
+  
     this.AltReset();
     this.ShiftReset();
+
+    this.fillKeyboard();
+    this.isLangChanged = true;
     this.textarea.focus();
 }
 
 Shift(){
-    this.shift = true;
-    this.CapsLock();
-    if(this.alt) this.changeLang();
+    this.shiftValue = true;
+    console.log("Shift caps = " + this.capsLock);
+    this.changeCapsLock();
+    if(this.altValue) this.changeLang();
+    console.log("Shift caps = " + this.capsLock);
 }
 
 ShiftReset(){
-    this.shift = false;
-    this.CapsLock();
+    this.shiftValue = false;
+    console.log("ShiftReset caps = " + this.capsLock);
+    this.changeCapsLock();
+    this.textarea.focus();
+    console.log("ShiftReset caps = " + this.capsLock);
 }
 
 ShiftLeft(){this.Shift();}
@@ -259,13 +306,14 @@ ShiftLeftReset(){this.ShiftReset();}
 ShiftRightReset(){this.ShiftReset();}
 
 Alt(){
-    this.alt = true;
-    if(this.shift) this.changeLang();
+    this.altValue = true;
+    if(this.shiftValue) this.changeLang();
     this.textarea.focus();
 }
 
 AltReset(){
-    this.alt = false;
+    this.altValue = false;
+    this.textarea.focus();
 }
 
 AltLeft(){this.Alt();}
@@ -274,12 +322,12 @@ AltLeftReset(){this.AltReset();}
 AltRightReset(){this.AltReset();}
 
 Ctrl(){
-    this.control = true;
+    this.controlValue = true;
     this.textarea.focus();
 }
 
 CtrlReset(){
-    this.control = false;
+    this.controlValue = false;
 
     if(this.currentPosition == this.textarea.selectionStart) this.textarea.selectionEnd = this.currentPosition;
     else this.textarea.selectionStart = this.currentPosition;
@@ -517,6 +565,15 @@ function mouseupOverKeyboard(){
         button.classList.remove('key_mousedown');
         btn.ClickedButtonKeyCode = "";
     }
+
+    if(btn.isLanguageChanged){
+        document.querySelector('.key[name = ShiftLeft]').classList.remove('key_mousedown');
+        document.querySelector('.key[name = ShiftRight]').classList.remove('key_mousedown');
+        document.querySelector('.key[name = AltLeft]').classList.remove('key_mousedown');
+        document.querySelector('.key[name = AltRight]').classList.remove('key_mousedown');
+        btn.isLanguageChanged = false;
+        console.log("lang_changed");
+    }
 }
 
 
@@ -538,28 +595,74 @@ function mousedownActionButton(event){
     event.preventDefault();
     event.target.classList.remove('key_mouseover');
     event.target.classList.add('key_mousedown');
-    btn[event.target.name]();
     btn.ClickedButtonKeyCode = event.target.name;
+    btn[event.target.name]();
 }
 
 let pressButtons = document.querySelectorAll('#keyPress');
-pressButtons.forEach(button => button.addEventListener('mousedown',clickPressButton));
+pressButtons.forEach(button => button.addEventListener('mousedown',mousedownPressButton));
+pressButtons.forEach(button => button.addEventListener('mouseup',mouseupPressButton));
 
-function clickPressButton(event){
+function mousedownPressButton(event){
     event.preventDefault();
-    event.target.classList.add('key_mousedown');   
     var button = event.target; 
+    button.classList.remove('key_mouseover');   
+    button.classList.add('key_mousedown');   
 
-    var fieldName, lenOfSideName, addFunctionName;
-    button.name.match("Left") ? lenOfSideName = 4 : lenOfSideName = 5;  
-    fieldName = (button.name.substring(0,button.name.length - lenOfSideName)).toLowerCase();
-    if(btn[fieldName]) addFunctionName = "Reset";
-    else addFunctionName = "";
+    let [buttonOtherSide, fieldName] = activateControlButton(button);
+    if(!buttonOtherSide.classList.contains('key_mousedown')) {
+        if(btn[fieldName]) addFunctionName = "Reset";
+        else addFunctionName = "";
+        funcName = `${button.name}${addFunctionName}`;
+        btn[funcName]();
+    }
+    console.log(button.name, btn[fieldName],event.type,funcName);
+}
 
-    funcName = `${button.name}${addFunctionName}`;
-    btn[funcName]();
+function mouseupPressButton(event){
+    event.preventDefault();
+    var button = event.target; 
+    button.classList.add('key_mouseover');   
+    
+    if(!btn.isLanguageChanged) { 
+        button.classList.remove('key_mousedown');   
+        let [buttonOtherSide, fieldName] = activateControlButton(button);
+        if(!buttonOtherSide.classList.contains('key_mousedown')) {
+            if(btn[fieldName]) {
+                addFunctionName = "Reset";
+                funcName = `${button.name}${addFunctionName}`;
+                btn[funcName]();
+            }    
+        }
+        console.log(button.name, btn[fieldName], event.type, funcName);
+    } else {
+        document.querySelector('.key[name = ShiftLeft]').classList.remove('key_mousedown');
+        document.querySelector('.key[name = ShiftRight]').classList.remove('key_mousedown');
+        document.querySelector('.key[name = AltLeft]').classList.remove('key_mousedown');
+        document.querySelector('.key[name = AltRight]').classList.remove('key_mousedown');
+        btn.isLanguageChanged = false;
+        console.log("lang_changed");
+    }
+}
 
-    console.log(button.name);
+function activateControlButton(button){
+    let addName, lenOfSideName, addFunctionName;
+    if (button.name.match("Left")){
+        lenOfSideName = 4;
+        addName = "Right";
+    } else {   
+        lenOfSideName = 5;
+        addName = "Left"; 
+    }    
+    
+    let buttonCommonName = button.name.substring(0,button.name.length - lenOfSideName); 
+    let fieldName = buttonCommonName.toLowerCase();
+
+    buttonCommonName += addName;
+    let buttonOtherSide = document.querySelector(`.keyboard__wrapper .key[name = ${buttonCommonName}]`);
+    console.log(buttonOtherSide);
+
+    return [buttonOtherSide, fieldName];
 }
 
 
