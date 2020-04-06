@@ -72,7 +72,7 @@ constructor(value){
     this.lang = "en";
     this.capsLock = "";
     this.textarea = "";
-    this.ctrl = false;
+    this.control = false;
     this.alt = false;
     this.shift = false;
     this.currentPosition = 0;
@@ -244,12 +244,16 @@ AltLeftReset(){this.AltReset();}
 AltRightReset(){this.AltReset();}
 
 Ctrl(){
-    this.ctrl = true;
+    this.control = true;
     this.textarea.focus();
 }
 
 CtrlReset(){
-    this.ctrl = false;
+    this.control = false;
+
+    if(this.currentPosition == this.textarea.selectionStart) this.textarea.selectionEnd = this.currentPosition;
+    else this.textarea.selectionStart = this.currentPosition;
+
     this.textarea.focus();
 }
 
@@ -327,13 +331,14 @@ changeCurrentPosition(parsedText){
     console.log(`row = ${currentRow}, col = ${currentColumn}, pos = ${this.currentPosition}`);
 }
 
-changeSelection(parsedText, shiftValue, isSelectionNeeded){
+changeSelection(parsedText, shiftValue){
     var oldPosition = this.currentPosition;
     this.changeCurrentPosition(parsedText);
     
     var start, end;
-    if(isSelectionNeeded){
-        [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];  
+    [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];  
+
+    if(this.control){
         if(start == end)
             if(shiftValue > 0) this.textarea.selectionEnd = this.currentPosition;
             else this.textarea.selectionStart = this.currentPosition;
@@ -349,34 +354,34 @@ changeSelection(parsedText, shiftValue, isSelectionNeeded){
     this.textarea.focus();
 }
 
-ArrowMove(shiftRow, shiftColumn, isSelectionNeeded){
+ArrowMove(shiftRow, shiftColumn){
     let parsedText = this.currentPositionInRow;
     if(shiftRow) {
         let [rows,currentRow,currentColumn] = this.changeCurrentRow(shiftRow, parsedText); 
         [,,currentColumn] = this.changeCurrentColumn(0,[[rows[currentRow]],0,currentColumn]);
-        this.changeSelection([rows,currentRow,currentColumn], shiftRow, isSelectionNeeded);
+        this.changeSelection([rows,currentRow,currentColumn], shiftRow);
     }
     if(shiftColumn) {
         parsedText = this.changeCurrentColumn(shiftColumn, parsedText);
-        this.changeSelection(parsedText, shiftColumn, isSelectionNeeded);
+        this.changeSelection(parsedText, shiftColumn);
     }   
 }
 
 
 ArrowUp(){
-    this.ArrowMove(-1,0,this.ctrl);
+    this.ArrowMove(-1,0);
 }
 
 ArrowRight(){
-    this.ArrowMove(0,1,this.ctrl); 
+    this.ArrowMove(0,1); 
 }
 
 ArrowDown(){
-    this.ArrowMove(1,0,this.ctrl);
+    this.ArrowMove(1,0);
 }
 
 ArrowLeft(){
-    this.ArrowMove(0,-1,this.ctrl);
+    this.ArrowMove(0,-1);
 }
 
 
