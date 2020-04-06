@@ -42,6 +42,10 @@
     font-size: 15px;
 }
 
+.key_action {
+    background-color: cyan;
+}
+
 .key_short {
     width: 53px;
 }
@@ -57,3 +61,15 @@
 .key_very-long {
     width: 330px;
 }
+
+
+
+.key_mouseover {
+    background-color: brown;
+}
+
+.key_mousedown {
+    border-radius: 50%;
+    background-color: red;
+}
+

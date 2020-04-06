@@ -28,7 +28,7 @@ const keys = {
     'BracketLeft': {en: ']', enUp: '}', ru: 'ъ', ruUp: 'Ъ', type: "print"},
     'Backslash': {en: '\\', enUp: '|', ru: '\\', ruUp: '/', type: "print"},
     'Delete': {en: 'Delete', enUp: 'Delete', ru: 'Delete', ruUp: 'Delete', type: "action"},
-    'CapsLock': {en: 'CapsLock', enUp: 'CapsLock', ru: 'CapsLock', ruUp: 'CapsLock',  type: "action"},
+    'CapsLock': {en: 'CapsLock', enUp: 'CapsLock', ru: 'CapsLock', ruUp: 'CapsLock',  type: "keyPress"},
     'KeyA': {en: 'a', enUp: 'A', ru: 'ф', ruUp: 'Ф', type: "print"},
     'KeyS': {en: 's', enUp: 'S', ru: 'ы', ruUp: 'Ы', type: "print"},
     'KeyD': {en: 'd', enUp: 'D', ru: 'в', ruUp: 'В', type: "print"},
@@ -49,9 +49,9 @@ const keys = {
     'KeyB': {en: 'b', enUp: 'B', ru: 'и', ruUp: 'И', type: "print"},
     'KeyN': {en: 'n', enUp: 'N', ru: 'т', ruUp: 'Т', type: "print"},
     'KeyM': {en: 'm', enUp: 'M', ru: 'ь', ruUp: 'Ь', type: "print"},
-    'Key,': {en: ',', enUp: '<', ru: 'б', ruUp: 'Б', type: "print"},
-    'Key.': {en: '.', enUp: '>', ru: 'ю', ruUp: 'Ю', type: "print"},
-    'Key/': {en: '/', enUp: '?', ru: '.', ruUp: ',', type: "print"},
+    'Comma': {en: ',', enUp: '<', ru: 'б', ruUp: 'Б', type: "print"},
+    'Period': {en: '.', enUp: '>', ru: 'ю', ruUp: 'Ю', type: "print"},
+    'Slash': {en: '/', enUp: '?', ru: '.', ruUp: ',', type: "print"},
     'ArrowUp': {en: '&uarr;', enUp: '&uarr;', ru: '&uarr;', ruUp: '&uarr;', type: "action"},
     'ShiftRight': {en: 'Shift', enUp: 'Shift', ru: 'Shift', ruUp: 'Shift', type: "keyPress"},
     'ControlLeft': {en: 'Ctrl', enUp: 'Ctrl', ru: 'Ctrl', ruUp: 'Ctrl', type: "keyPress"},
@@ -76,6 +76,7 @@ constructor(value){
     this.alt = false;
     this.shift = false;
     this.currentPosition = 0;
+    this.clickedButtonKeyCode = "";
 
     if(Array.isArray(value)){           
         if(value.length == 1)
@@ -85,6 +86,14 @@ constructor(value){
         else if(value.length == 3)
             [this.lang, this.capsLock, this.workspace] = value; 
     };
+}
+
+set ClickedButtonKeyCode(keyCode){
+    this.clickedButtonKeyCode = keyCode;
+}
+
+get ClickedButtonKeyCode(){
+    return this.clickedButtonKeyCode;
 }
 
 set language(lang) {
@@ -457,6 +466,11 @@ buttons[58].classList.add('key_very-long');
 
 
 btn.fillKeyboard();
+document.querySelectorAll('.key_short').forEach(button => button.classList.add('key_action'));
+document.querySelectorAll('.key_middle').forEach(button => button.classList.add('key_action'));
+document.querySelectorAll('.key_long').forEach(button => button.classList.add('key_action'));
+document.querySelectorAll('#action').forEach(button => button.classList.add('key_action'));
+document.querySelectorAll('#keyPress').forEach(button => button.classList.add('key_action'));
 
 btn.workspace = output; 
 btn.Print("KeyZ");
@@ -479,32 +493,58 @@ btn.Print("KeyP");
 }());
 
 
-let allButtons = document.querySelectorAll('.keyboard__wrapper button');
-allButtons.forEach(button => button.addEventListener('click',someButtonClick));
+let allButtons = document.querySelectorAll('.key');
+allButtons.forEach(button => button.addEventListener('mouseover',mouseoverSomeButton));
+allButtons.forEach(button => button.addEventListener('mouseout',mouseoutSomeButton));
 
-function someButtonClick(){
-//    console.log(event.target.name);
+function mouseoverSomeButton(){
+    event.preventDefault();
+    event.target.classList.add('key_mouseover');
 }
 
-let actionButtons = document.querySelectorAll('#action');
-actionButtons.forEach(button => button.addEventListener('click',clickActionButton));
-
-function clickActionButton(event){
-    btn[event.target.name]();
+function mouseoutSomeButton(){
+    event.preventDefault();
+    event.target.classList.remove('key_mouseover');
 }
+
+let keyboard = document.querySelector('.keyboard__wrapper');
+keyboard.addEventListener('mouseup',mouseupOverKeyboard);
+
+function mouseupOverKeyboard(){
+    event.preventDefault();
+    if(btn.ClickedButtonKeyCode) {
+        let button = document.querySelector(`.keyboard__wrapper button[name = ${btn.ClickedButtonKeyCode}]`);
+        button.classList.remove('key_mousedown');
+        btn.ClickedButtonKeyCode = "";
+    }
+}
+
 
 let printButtons = document.querySelectorAll('#print');
-printButtons.forEach(button => button.addEventListener('click',clickPrintButton));
+printButtons.forEach(button => button.addEventListener('mousedown', mousedownPrintButton));
 
-function clickPrintButton(event){
+function mousedownPrintButton(event){
+    event.preventDefault();
+    console.log(event.target, event.type);
+    event.target.classList.remove('key_mouseover');
+    event.target.classList.add('key_mousedown');
     btn.PrintSymbol(event.target.innerHTML);
+    btn.ClickedButtonKeyCode = event.target.name;
 }
+
+function mouseupPrintButton(event){
+    event.preventDefault();
+    console.log(event.target, event.type);
+}
+
 
 
 let pressButtons = document.querySelectorAll('#keyPress');
 pressButtons.forEach(button => button.addEventListener('click',clickPressButton));
 
 function clickPressButton(event){
+    event.preventDefault();
+    event.target.classList.toggle('key_mousedown');   
     var button = event.target; 
 
     var fieldName, lenOfSideName, addFunctionName;
@@ -519,6 +559,12 @@ function clickPressButton(event){
     console.log(button.name);
 }
 
+let actionButtons = document.querySelectorAll('#action');
+actionButtons.forEach(button => button.addEventListener('click',clickActionButton));
+
+function clickActionButton(event){
+    btn[event.target.name]();
+}
 
 let textarea = document.querySelector('.output-textarea');
 textarea.addEventListener('click',clickTextarea);
