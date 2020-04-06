@@ -213,6 +213,10 @@ Delete(){
     this.textarea.focus();
 }
 
+Meta(){
+    return;
+}
+
 CapsLock(){
     if(this.capsLock) this.capsLock = "";
     else this.capsLock = "Up";
