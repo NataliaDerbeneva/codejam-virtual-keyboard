@@ -28,7 +28,7 @@ const keys = {
     'BracketLeft': {en: ']', enUp: '}', ru: 'ъ', ruUp: 'Ъ', type: "print"},
     'Backslash': {en: '\\', enUp: '|', ru: '\\', ruUp: '/', type: "print"},
     'Delete': {en: 'Delete', enUp: 'Delete', ru: 'Delete', ruUp: 'Delete', type: "action"},
-    'CapsLock': {en: 'CapsLock', enUp: 'CapsLock', ru: 'CapsLock', ruUp: 'CapsLock',  type: "keyPress"},
+    'CapsLock': {en: 'CapsLock', enUp: 'CapsLock', ru: 'CapsLock', ruUp: 'CapsLock',  type: "capsLock"},
     'KeyA': {en: 'a', enUp: 'A', ru: 'ф', ruUp: 'Ф', type: "print"},
     'KeyS': {en: 's', enUp: 'S', ru: 'ы', ruUp: 'Ы', type: "print"},
     'KeyD': {en: 'd', enUp: 'D', ru: 'в', ruUp: 'В', type: "print"},
@@ -222,7 +222,7 @@ Delete(){
     this.textarea.focus();
 }
 
-Meta(){
+MetaLeft(){
     return;
 }
 
@@ -525,26 +525,29 @@ printButtons.forEach(button => button.addEventListener('mousedown', mousedownPri
 
 function mousedownPrintButton(event){
     event.preventDefault();
-    console.log(event.target, event.type);
     event.target.classList.remove('key_mouseover');
     event.target.classList.add('key_mousedown');
     btn.PrintSymbol(event.target.innerHTML);
     btn.ClickedButtonKeyCode = event.target.name;
 }
 
-function mouseupPrintButton(event){
+let actionButtons = document.querySelectorAll('#action');
+actionButtons.forEach(button => button.addEventListener('mousedown', mousedownActionButton));
+
+function mousedownActionButton(event){
     event.preventDefault();
-    console.log(event.target, event.type);
+    event.target.classList.remove('key_mouseover');
+    event.target.classList.add('key_mousedown');
+    btn[event.target.name]();
+    btn.ClickedButtonKeyCode = event.target.name;
 }
 
-
-
 let pressButtons = document.querySelectorAll('#keyPress');
-pressButtons.forEach(button => button.addEventListener('click',clickPressButton));
+pressButtons.forEach(button => button.addEventListener('mousedown',clickPressButton));
 
 function clickPressButton(event){
     event.preventDefault();
-    event.target.classList.toggle('key_mousedown');   
+    event.target.classList.add('key_mousedown');   
     var button = event.target; 
 
     var fieldName, lenOfSideName, addFunctionName;
@@ -559,10 +562,14 @@ function clickPressButton(event){
     console.log(button.name);
 }
 
-let actionButtons = document.querySelectorAll('#action');
-actionButtons.forEach(button => button.addEventListener('click',clickActionButton));
 
-function clickActionButton(event){
+let capsLockButton = document.querySelector('#capsLock');
+capsLockButton.addEventListener('mousedown',clickCapsLockButton);
+
+function clickCapsLockButton(event){
+    event.preventDefault();
+    event.target.classList.toggle('key_mouseover');
+    event.target.classList.toggle('key_mousedown');   
     btn[event.target.name]();
 }
 
