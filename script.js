@@ -79,6 +79,12 @@ constructor(){
     this.clickedButtonKeyCode = "";
     this.isLangChanged = false;
 
+    this.isCapsLockOn = false;
+    this.isShiftOnKEY = false;
+    this.isShiftOnMOUSE = false;
+    this.isCtrlOn = false;
+    this.isAltOn = false;
+
     if(arguments.length){           
         if(arguments.length == 1)
             [this.lang] = arguments;
@@ -272,6 +278,7 @@ CapsLock(){
     this.changeCapsLock();
     this.capsValue = !this.capsValue;
     this.textarea.focus();
+    this.isCapsLockOn =!this.isCapsLockOn;
 }
 
 changeLang(){
@@ -580,6 +587,9 @@ function addListeners(){
 
     let textarea = document.querySelector('.output-textarea');
     textarea.addEventListener('click',clickTextarea);
+
+    textarea.addEventListener('keydown', keyDown);
+    textarea.addEventListener('keyup',keyUp);
 }
 
 function saveLanguage(currentLanguage){
@@ -660,18 +670,22 @@ function mousedownActionButton(event){
 }
 
 function mousedownPressButton(event){
-    mouseDown(event);
+    event.preventDefault();
     var button = event.target; 
     var addFunctionName; 
     var funcName = "";
 
     let [buttonOtherSide, fieldName] = activateControlButton(button);
-    if(!buttonOtherSide.classList.contains('key_mousedown')) {
-        if(btn[fieldName]) addFunctionName = "Reset";
-        else addFunctionName = "";
-        funcName = `${button.name}${addFunctionName}`;
-        btn[funcName]();
-    }
+    if(!btn.isShiftOnKEY && !btn.isShiftOnMOUSE){
+        mouseDown(event);
+        if(!buttonOtherSide.classList.contains('key_mousedown')) {
+            if(btn[fieldName]) addFunctionName = "Reset";
+            else addFunctionName = "";
+            funcName = `${button.name}${addFunctionName}`;
+            btn[funcName]();
+            btn.isShiftOnMOUSE = true;
+        }
+}
 }
 
 function mouseupPressButton(event){
@@ -681,9 +695,12 @@ function mouseupPressButton(event){
     var addFunctionName;
     var funcName = "";
 
+
+    let [buttonOtherSide, fieldName] = activateControlButton(button);
+    if(btn.isShiftOnMOUSE && !buttonOtherSide.classList.contains('key_mousedown')){
+        btn.isShiftOnMOUSE  = false;
     if(!btn.isLanguageChanged) { 
         button.classList.remove('key_mousedown');   
-        let [buttonOtherSide, fieldName] = activateControlButton(button);
         if(!buttonOtherSide.classList.contains('key_mousedown')) {
             if(btn[fieldName]) {
                 addFunctionName = "Reset";
@@ -700,6 +717,7 @@ function mouseupPressButton(event){
         saveLanguage(btn.language);
         console.log("lang_changed");
     }
+    } 
 }
 
 function activateControlButton(button){
@@ -732,4 +750,80 @@ function clickCapsLockButton(event){
 
 function clickTextarea(){
     btn.setCurrentPosition();
+}
+
+
+function keyDown(){
+    let keyCode = event.code;
+
+    let className = '.key[name=' + keyCode + ']';
+    let key = document.querySelector(`.keyboard__wrapper ${className}`);
+
+    if(keyCode == "CapsLock"){
+        event.preventDefault();
+        key.classList.toggle('key_mousedown');
+        btn[keyCode]();
+        btn.isCapsLockOn = !btn.isCapsLockOn;
+    } else if(keyCode.match("Left") || keyCode.match("Right")){
+        if(!btn.isShiftOnMOUSE){
+            let otherKeyCode;
+            if(keyCode.match("Left")) otherKeyCode = keyCode.substring(0,keyCode.length - 4) + "Right";
+            else otherKeyCode = keyCode.substring(0,keyCode.length - 5) + "Left";
+            let otherClassName = '.key[name=' + otherKeyCode + ']';
+            let otherKey = document.querySelector(`.keyboard__wrapper ${otherClassName}`);
+            if(!otherKey.classList.contains('key_mousedown')){
+                key.classList.add('key_mousedown');
+                console.log(otherKey.name, otherKey.classList, key.name, key.classList);
+                if(!btn.isShiftOnKEY){
+                    btn.isShiftOnKEY = true;
+                    if(btn.isCapsLockOn){
+                        btn[keyCode + "Reset"]();
+                    } else {
+                        btn[keyCode]();    
+                    }
+                }
+            }
+        }
+    } else key.classList.add('key_mousedown');
+
+    if(keyCode == "Tab") {
+        event.preventDefault();
+        btn[keyCode]();
+    }
+
+    if(key.id == "print"){
+        event.preventDefault();
+        btn.Print(keyCode);
+    }
+
+}
+
+function keyUp(){
+    let keyCode = event.code;
+    console.log(keyCode);
+
+    let className = '.key[name=' + keyCode + ']';
+    let key = document.querySelector(`.keyboard__wrapper ${className}`);
+
+    if(!keyCode.match("CapsLock") && key.classList.contains('key_mousedown')) {
+        key.classList.remove('key_mousedown');
+        if(keyCode.match("Left") || keyCode.match("Right")){
+            if(btn.isShiftOnKEY){
+                btn.isShiftOnKEY = false;
+                if(btn.isCapsLockOn){
+                    btn[keyCode]();
+                } else {
+                    btn[keyCode + "Reset"]();    
+                }
+            }
+            if(btn.isShiftOnMOUSE){
+                btn.isShiftOnMOUSE = false;
+                if(btn.isCapsLockOn){
+                    btn[keyCode]();
+                } else {
+                    btn[keyCode + "Reset"]();    
+                }
+            }
+        }
+    }
 }
