@@ -421,7 +421,7 @@ changeSelection(parsedText, shiftValue){
     var start, end;
     [start, end] = [this.textarea.selectionStart, this.textarea.selectionEnd];  
 
-    if(this.shift){
+    if(this.shiftValue){
         if(start == end)
             if(shiftValue > 0) this.textarea.selectionEnd = this.currentPosition;
             else this.textarea.selectionStart = this.currentPosition;
@@ -636,13 +636,24 @@ function mouseUp(event){
 
 function mousedownPrintButton(event){
     mouseDown(event);
+
+    let shLeft = document.querySelector('.key[name = ShiftLeft]');
+    let shRight = document.querySelector('.key[name = ShiftRight]');
+
+    if(shLeft.classList.contains('key_mousedown')){
+        shLeft.classList.remove('key_mousedown');       
+        btn.ShiftLeftReset();
+        btn.isShiftOnMOUSE = false;
+        btn.isShiftOnKEY = false;
+    } else if(shRight.classList.contains('key_mousedown')){
+        shRight.classList.remove('key_mousedown');       
+        btn.ShiftRightReset();
+        btn.isShiftOnKEY = false;
+        btn.isShiftOnMOUSE = false;
+    }
+
     btn.PrintSymbol(event.target.innerHTML);
     btn.ClickedButtonKeyCode = event.target.name;
-
-    document.querySelector('.key[name = ShiftLeft]').classList.remove('key_mousedown');
-    document.querySelector('.key[name = ShiftRight]').classList.remove('key_mousedown');
-    btn.ControlLeftReset();
-    btn.ControlRightReset();
 }
 
 
@@ -652,10 +663,20 @@ function mousedownSpecificPrintButton(){
     btn.ClickedButtonKeyCode = event.target.name;
     btn[event.target.name]();
 
-    document.querySelector('.key[name = ShiftLeft]').classList.remove('key_mousedown');
-    document.querySelector('.key[name = ShiftRight]').classList.remove('key_mousedown');
-    btn.ControlLeftReset();
-    btn.ControlRightReset();
+    let shLeft = document.querySelector('.key[name = ShiftLeft]');
+    let shRight = document.querySelector('.key[name = ShiftRight]');
+
+    if(shLeft.classList.contains('key_mousedown')){
+        shLeft.classList.remove('key_mousedown');       
+        btn.ShiftLeftReset();
+        btn.isShiftOnMOUSE = false;
+        btn.isShiftOnKEY = false;
+    } else if(shRight.classList.contains('key_mousedown')){
+        shRight.classList.remove('key_mousedown');       
+        btn.ShiftRightReset();
+        btn.isShiftOnKEY = false;
+        btn.isShiftOnMOUSE = false;
+    }
 }
 
 function mousedownActionButton(event){
@@ -800,7 +821,11 @@ function keyDown(){
         event.preventDefault();
         btn.Print(keyCode);
     }
-    console.log(event.type, btn.isCtrlOnKEY, btn.isCtrlOnMOUSE, btn.isAltOnKEY, btn.isAltOnMOUSE);
+
+    if(key.match("Arrow")){
+        event.preventDefault();
+        btn[keyCode]();
+    }
 }
 
 function keyUp(){
@@ -837,5 +862,4 @@ function keyUp(){
             }
         }
     }
-    console.log(event.type, btn.isCtrlOnKEY, btn.isCtrlOnMOUSE, btn.isAltOnKEY, btn.isAltOnMOUSE);
 }    
