@@ -7,8 +7,8 @@
     width: 100%;
     height: fit-content;
     padding: 1px;
-    font-size: 14px;
-    font-family: Verdana, sans-serif;
+    font-size: 15px;
+    font-family: "Verdana";
 }
 
 .output-textarea {
@@ -18,6 +18,7 @@
     display: block;
     border: 1px solid green;
     color: black;
+    font-family: "Verdana";
     font-size: 16px;
 }
 
@@ -41,7 +42,8 @@
     border: none;
     border-radius: 5px;
     color: black;
-    font-size: 16px;
+    font-family: Verdana;
+    font-size: 15px;
     transition: border-radius 0.1s, background-color 0.1s;
 }
 
