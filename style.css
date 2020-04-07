@@ -40,6 +40,7 @@
     border-radius: 5px;
     color: black;
     font-size: 15px;
+    transition: border-radius 0.1s, background-color 0.1s;
 }
 
 .key_action {
@@ -68,8 +69,8 @@
     background-color: brown;
 }
 
-.key_mousedown {
-    border-radius: 50%;
+.key.key_mousedown {
+    border-radius: 25px;
     background-color: red;
 }
 

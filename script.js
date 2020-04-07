@@ -623,13 +623,13 @@ function mouseupOverKeyboard(){
 
 function mouseDown(event){
     event.preventDefault();
-    event.target.classList.remove('key_mouseover');
+    //event.target.classList.remove('key_mouseover');
     event.target.classList.add('key_mousedown');
 }
 
 function mouseUp(event){
     event.preventDefault();
-    event.target.classList.add('key_mouseover');
+    //event.target.classList.add('key_mouseover');
     event.target.classList.remove('key_mousedown');
 }
 
@@ -747,7 +747,7 @@ function activateControlButton(button){
 
 function clickCapsLockButton(event){
     event.preventDefault();
-    event.target.classList.toggle('key_mouseover');
+//    event.target.classList.toggle('key_mouseover');
     event.target.classList.toggle('key_mousedown');   
     btn[event.target.name]();
 }
