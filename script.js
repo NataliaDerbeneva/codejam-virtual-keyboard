@@ -756,83 +756,87 @@ function clickTextarea(){
 function keyDown(){
     let keyCode = event.code;
 
-    let className = '.key[name=' + keyCode + ']';
-    let key = document.querySelector(`.keyboard__wrapper ${className}`);
-    var isFieldOnKEY = "is" + key.innerHTML + "OnKEY"; 
-    var isFieldOnMOUSE = "is" + key.innerHTML + "OnMOUSE";
+    if(keyCode in keys){
+        let className = '.keyboard__wrapper .key[name=' + keyCode + ']';
+        let key = document.querySelector(className);
+        var isFieldOnKEY = "is" + key.innerHTML + "OnKEY"; 
+        var isFieldOnMOUSE = "is" + key.innerHTML + "OnMOUSE";
 
-    if(keyCode == "CapsLock"){
-        event.preventDefault();
-        key.classList.toggle('key_mousedown');
-        btn[keyCode]();
-        btn.isCapsLockOn = !btn.isCapsLockOn;
-    } else if(keyCode.match("Left") || keyCode.match("Right")){
-        if(!btn[isFieldOnMOUSE]){
-            let otherKeyCode;
-            if(keyCode.match("Left")) otherKeyCode = keyCode.substring(0,keyCode.length - 4) + "Right";
-            else otherKeyCode = keyCode.substring(0,keyCode.length - 5) + "Left";
-            let otherClassName = '.key[name=' + otherKeyCode + ']';
-            let otherKey = document.querySelector(`.keyboard__wrapper ${otherClassName}`);
-            if(!otherKey.classList.contains('key_mousedown')){
-                key.classList.add('key_mousedown');
-                if(!btn[isFieldOnKEY]){
-                    btn[isFieldOnKEY] = true;
-                    if(key.innerHTML == "Shift"){
-                        if(btn.isCapsLockOn) btn[keyCode + "Reset"]();
-                        else btn[keyCode]();    
-                    } else btn[keyCode]();
+        if(keyCode == "CapsLock"){
+            event.preventDefault();
+            key.classList.toggle('key_mousedown');
+            btn[keyCode]();
+            btn.isCapsLockOn = !btn.isCapsLockOn;
+        } else if(keyCode.match("Left") || keyCode.match("Right")){
+            if(!btn[isFieldOnMOUSE]){
+                let otherKeyCode;
+                if(keyCode.match("Left")) otherKeyCode = keyCode.substring(0,keyCode.length - 4) + "Right";
+                else otherKeyCode = keyCode.substring(0,keyCode.length - 5) + "Left";
+                let otherClassName = '.keyboard__wrapper .key[name=' + otherKeyCode + ']';
+                let otherKey = document.querySelector(otherClassName);
+                if(!otherKey.classList.contains('key_mousedown')){
+                    key.classList.add('key_mousedown');
+                    if(!btn[isFieldOnKEY]){
+                        btn[isFieldOnKEY] = true;
+                        if(key.innerHTML == "Shift"){
+                            if(btn.isCapsLockOn) btn[keyCode + "Reset"]();
+                            else btn[keyCode]();    
+                        } else btn[keyCode]();
+                    }
                 }
             }
+        } else key.classList.add('key_mousedown');
+
+        if(keyCode == "Tab") {
+            event.preventDefault();
+            btn[keyCode]();
         }
-    } else key.classList.add('key_mousedown');
 
-    if(keyCode == "Tab") {
-        event.preventDefault();
-        btn[keyCode]();
-    }
+        if(key.id == "print"){
+            event.preventDefault();
+            btn.Print(keyCode);
+        }
 
-    if(key.id == "print"){
-        event.preventDefault();
-        btn.Print(keyCode);
-    }
-
-    if(keyCode.match("Arrow")){
-        event.preventDefault();
-        btn[keyCode]();
+        if(keyCode.match("Arrow")){
+            event.preventDefault();
+            btn[keyCode]();
+        }
     }
 }
 
 function keyUp(){
     let keyCode = event.code;
 
-    let className = '.key[name=' + keyCode + ']';
-    let key = document.querySelector(`.keyboard__wrapper ${className}`);
-    var isFieldOnKEY = "is" + key.innerHTML + "OnKEY"; 
-    var isFieldOnMOUSE = "is" + key.innerHTML + "OnMOUSE";
+    if(keyCode in keys){
+        let className = '.key[name=' + keyCode + ']';
+        let key = document.querySelector(`.keyboard__wrapper ${className}`);
+        var isFieldOnKEY = "is" + key.innerHTML + "OnKEY"; 
+        var isFieldOnMOUSE = "is" + key.innerHTML + "OnMOUSE";
 
-    if(!keyCode.match("CapsLock") && key.classList.contains('key_mousedown')) {
-        key.classList.remove('key_mousedown');
-        if(keyCode.match("Left") || keyCode.match("Right")){
-            if(btn[isFieldOnKEY]){
-                btn[isFieldOnKEY] = false;
-                if(key.innerHTML == "Shift"){
-                    if(btn.isCapsLockOn) btn[keyCode]();
-                    else btn[keyCode + "Reset"]();    
-                } else {
-                    if(!btn.isLanguageChanged) btn[keyCode + "Reset"]();
-                    else resetOptionsOnChangeLanguage();
+        if(!keyCode.match("CapsLock") && key.classList.contains('key_mousedown')) {
+            key.classList.remove('key_mousedown');
+            if(keyCode.match("Left") || keyCode.match("Right")){
+                if(btn[isFieldOnKEY]){
+                    btn[isFieldOnKEY] = false;
+                    if(key.innerHTML == "Shift"){
+                        if(btn.isCapsLockOn) btn[keyCode]();
+                        else btn[keyCode + "Reset"]();    
+                    } else {
+                        if(!btn.isLanguageChanged) btn[keyCode + "Reset"]();
+                        else resetOptionsOnChangeLanguage();
+                    }
                 }
-            }
-            if(btn[isFieldOnMOUSE]){
-                btn[isFieldOnMOUSE] = false;
-                if(key.innerHTML == "Shift") {
-                    if(btn.isCapsLockOn) btn[keyCode]();
-                    else btn[keyCode + "Reset"]();     
-                } else {
-                    if(!btn.isLanguageChanged) btn[keyCode + "Reset"]();
-                    else resetOptionsOnChangeLanguage();
+                if(btn[isFieldOnMOUSE]){
+                    btn[isFieldOnMOUSE] = false;
+                    if(key.innerHTML == "Shift") {
+                        if(btn.isCapsLockOn) btn[keyCode]();
+                        else btn[keyCode + "Reset"]();     
+                    } else {
+                        if(!btn.isLanguageChanged) btn[keyCode + "Reset"]();
+                        else resetOptionsOnChangeLanguage();
+                    }
                 }
             }
         }
-    }
+    }    
 }    
